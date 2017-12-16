@@ -42,7 +42,7 @@ var balances = function (callback) {
   });
 };
 
-var executions = function (product_id, callback) {
+var executions = function (callback) {
   var url = '/executions/me?product_id=' + product_id;
   var payload = {
     'path': url,
@@ -59,7 +59,7 @@ var executions = function (product_id, callback) {
 
 var orders = function (callback) {
   var verb = 'GET';
-  var url = '/orders?status=live';
+  var url = '/orders?&status=live&product_id=' + product_id;
   var payload = {
     'path': url,
     'nonce': Date.now(),
