@@ -108,10 +108,30 @@ var cancelOrder = function (id, callback) {
   });
 };
 
+var editOrder = function (id, price, callback) {
+  var url = '/orders/' + id;
+  var payload = {
+    'path': url,
+    'nonce': Date.now(),
+    'token_id': token_id,
+    "order": {
+      "quantity": config.quantity,
+      "price": price
+    }
+  };
+
+  var options = getOptions(url, payload);
+
+  baseRequest.put(options, function (error, response, body) {
+    callback(JSON.parse(body));
+  });
+};
+
 module.exports = {
   balances: balances,
   trades: executions,
   liveorders: orders,
   neworder: createOrder,
-  cancelorder: cancelOrder
+  cancelorder: cancelOrder,
+  editorder: editOrder
 };

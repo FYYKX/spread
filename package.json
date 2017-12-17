@@ -16,6 +16,7 @@
   },
   "homepage": "https://github.com/FYYKX/spread#readme",
   "dependencies": {
+    "async": "^2.6.0",
     "jsonwebtoken": "^8.1.0",
     "node-cron": "^1.2.1",
     "request": "^2.83.0"
