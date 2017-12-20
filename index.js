@@ -5,6 +5,8 @@ var async = require('async');
 var qryptos = require('./qryptos');
 var config = require('./config');
 
+var interval = 0.00000001;
+
 cron.schedule('*/5 * * * * *', function () {
     async.parallel({
         coinmarketcap: function (callback) {
@@ -40,8 +42,12 @@ cron.schedule('*/5 * * * * *', function () {
         if (err) {
             console.log(err);
         } else {
-            var coinmarketcap_price = results.coinmarketcap.find(item => item.symbol == config.symbol).price_eth;
+            if (results.order.status != 'live') {
+                console.log('This is not a live order');
+                process.exit();
+            }
 
+            var coinmarketcap_price = results.coinmarketcap.find(item => item.symbol == config.symbol)['price_' + config.currency.toLowerCase()];
             var current_price = results.order.price;
             var quantity = results.order.quantity;
 
@@ -50,42 +56,75 @@ cron.schedule('*/5 * * * * *', function () {
             var buy = book.buy_price_levels[0];
             var buy_second = book.buy_price_levels[1];
             var buy_price = parseFloat(buy[0]);
-            var buy_quantity = buy[1];
+            var buy_quantity = parseFloat(buy[1]);
 
             var sell = book.sell_price_levels[0];
             var sell_second = book.sell_price_levels[1];
             var sell_price = parseFloat(sell[0]);
-            var sell_quantity = sell[1];
-
-            var profit = (sell_price - current_price) / current_price;
+            var sell_quantity = parseFloat(sell[1]);
 
             if (config.side == 'buy') {
+                //buy
+                var profit = (sell_price - current_price) / current_price;
+                console.log('profit: ' + profit.toFixed(2) + '%');
                 if (current_price < coinmarketcap_price && profit >= config.profit) {
                     //check status
                     var change = false;
-                    if (current_price >= buy_price && config.quantity == buy.buy_quantity) {
+                    if (current_price >= buy_price && quantity == buy_quantity) {
                         //check second order
-                        var spread = (current_price - buy_second[0]).toFixed(8);
-                        if (spread > 0.00000001) {
+                        var difference = (current_price - buy_second[0]).toFixed(8);
+                        if (difference > interval) {
                             change = true;
-                            current_price = parseFloat(buy_second[0]) + 0.00000001;
+                            current_price = parseFloat(buy_second[0]) + interval;
                         }
                     } else {
-                        //edit order
-                        console.log(current_price + ' ' + buy_price);
+                        //edit order to be first order
                         change = true;
-                        current_price = buy_price + 0.00000001;
+                        current_price = buy_price + interval;
                     }
 
                     if (change) {
+                        current_price = current_price.toFixed(8);
                         qryptos.editorder(config.id, current_price, quantity, function (data) {
-                            console.log(Date.now() + ' Change price: ' + current_price + ', profit: ' + profit.toFixed(2) + '%');
+                            console.log('Change price: ' + current_price + ', profit: ' + profit.toFixed(2) + '%');
                         });
                     }
                 } else {
                     //cancel order
                     qryptos.cancelorder(config.id, function (response) {
-                        console.log(Date.now() + ' Cancel order ' + config.id);
+                        console.log('Cancel order ' + config.id);
+                        process.exit();
+                    });
+                }
+            } else {
+                //sell
+                var profit = (sell_price - config.cost) / config.cost;
+                console.log('profit: ' + profit.toFixed(2) + '%');
+                if (current_price > coinmarketcap_price && profit >= config.profit) {
+                    var change = false;
+                    if (current_price <= sell_price && quantity == sell_quantity) {
+                        //check second order
+                        var difference = (sell_second[0] - current_price).toFixed(8);
+                        if (difference > interval) {
+                            change = true;
+                            current_price = parseFloat(sell_second[0]) - interval;
+                        }
+                    } else {
+                        //edit order to be first order
+                        change = true;
+                        current_price = sell_price - interval;
+                    }
+
+                    if (change) {
+                        current_price = current_price.toFixed(8);
+                        qryptos.editorder(config.id, current_price, quantity, function (data) {
+                            console.log('Change price: ' + current_price + ', profit: ' + profit.toFixed(2) + '%');
+                        });
+                    }
+                } else {
+                    //cancel order
+                    qryptos.cancelorder(config.id, function (response) {
+                        console.log('Cancel order ' + config.id);
                         process.exit();
                     });
                 }
