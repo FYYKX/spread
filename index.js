@@ -66,7 +66,7 @@ cron.schedule('*/5 * * * * *', function () {
             if (config.side == 'buy') {
                 //buy
                 var profit = (sell_price - current_price) / current_price;
-                console.log('profit: ' + profit.toFixed(2) + '%');
+                console.log('profit: ' + (profit * 100).toFixed(2) + '%');
                 if (current_price < coinmarketcap_price && profit >= config.profit) {
                     //check status
                     var change = false;
@@ -86,7 +86,7 @@ cron.schedule('*/5 * * * * *', function () {
                     if (change) {
                         current_price = current_price.toFixed(8);
                         qryptos.editorder(config.id, current_price, quantity, function (data) {
-                            console.log('Change price: ' + current_price + ', profit: ' + profit.toFixed(2) + '%');
+                            console.log('Change price: ' + current_price + ', profit: ' + (profit * 100).toFixed(2) + '%');
                         });
                     }
                 } else {
@@ -99,7 +99,7 @@ cron.schedule('*/5 * * * * *', function () {
             } else {
                 //sell
                 var profit = (sell_price - config.cost) / config.cost;
-                console.log('profit: ' + profit.toFixed(2) + '%');
+                console.log('profit: ' + (profit * 100).toFixed(2) + '%');
                 if (current_price > coinmarketcap_price && profit >= config.profit) {
                     var change = false;
                     if (current_price <= sell_price && quantity == sell_quantity) {
@@ -118,7 +118,7 @@ cron.schedule('*/5 * * * * *', function () {
                     if (change) {
                         current_price = current_price.toFixed(8);
                         qryptos.editorder(config.id, current_price, quantity, function (data) {
-                            console.log('Change price: ' + current_price + ', profit: ' + profit.toFixed(2) + '%');
+                            console.log('Change price: ' + current_price + ', profit: ' + (profit * 100).toFixed(2) + '%');
                         });
                     }
                 } else {
