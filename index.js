@@ -66,7 +66,6 @@ cron.schedule('*/5 * * * * *', function () {
                     if (current_price >= buy_price && config.quantity == buy.buy_quantity) {
                         //check second order
                         var spread = (current_price - buy_second[0]).toFixed(8);
-                        console.log('spread ' + spread);
                         if (spread > 0.00000001) {
                             change = true;
                             current_price = parseFloat(buy_second[0]) + 0.00000001;
@@ -76,23 +75,19 @@ cron.schedule('*/5 * * * * *', function () {
                         console.log(current_price + ' ' + buy_price);
                         change = true;
                         current_price = buy_price + 0.00000001;
-
-                        // qryptos.editorder(config.id, current_price, quantity, function (data) {
-                        //     console.log('Change price to ' + data.price);
-                        // });
-                        // qryptos.neworder(config.product_id, '10', '0.00000001', 'buy', function (response) {
-                        //     console.log(response);
-                        // });
-                        // qryptos.cancelorder(config.id, function (response) {
-                        //     console.log('Cancel order ' + config.id);
-                        // });
                     }
 
                     if (change) {
                         qryptos.editorder(config.id, current_price, quantity, function (data) {
-                            console.log('Change price: ' + current_price + ', profit: ' + profit.toFixed(2) + '%');
+                            console.log(Date.now() + ' Change price: ' + current_price + ', profit: ' + profit.toFixed(2) + '%');
                         });
                     }
+                } else {
+                    //cancel order
+                    qryptos.cancelorder(config.id, function (response) {
+                        console.log(Date.now() + ' Cancel order ' + config.id);
+                        process.exit();
+                    });
                 }
             }
         }
