@@ -51,6 +51,11 @@ if (config.length) {
                     process.exit();
                 }
 
+                if (results.order.filled_quantity > 0) {
+                    console.log('Filled quantity is %s', results.order.filled_quantity);
+                    process.exit();
+                }
+
                 var coinmarketcap_price = results.coinmarketcap.find(item => item.symbol == config.symbol)['price_' + config.currency.toLowerCase()];
                 var current_price = results.order.price;
                 var quantity = results.order.quantity;
