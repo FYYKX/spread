@@ -47,7 +47,7 @@ if (config.length) {
                 console.log(err);
             } else {
                 if (results.order.status != 'live') {
-                    console.log('This is not a live order');
+                    console.log('The order id %s %s %s status is %s', config.id, results.order.side, results.order.currency_pair_code, results.order.status);
                     process.exit();
                 }
 
