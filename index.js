@@ -94,6 +94,12 @@ if (config.length) {
                             });
                         }
                     } else {
+                        if (current_price > coinmarketcap_price) {
+                            console.log('buy %s > %s(coinmarket price)', current_price, coinmarketcap_price);
+                        }
+                        if (profit < config.profit) {
+                            console.log('buy %s < %s(config profit)', profit, config.profit);
+                        }
                         //cancel order
                         qryptos.cancelorder(config.id, function (response) {
                             console.log('Cancel order ' + config.id);
@@ -126,6 +132,12 @@ if (config.length) {
                             });
                         }
                     } else {
+                        if (current_price < coinmarketcap_price) {
+                            console.log('sell %s < %s(coinmarket price)', current_price, coinmarketcap_price);
+                        }
+                        if (profit < config.profit) {
+                            console.log('sell %s < %s(config profit)', profit, config.profit);
+                        }
                         //cancel order
                         qryptos.cancelorder(config.id, function (response) {
                             console.log('Cancel order ' + config.id);
