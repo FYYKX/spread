@@ -52,7 +52,7 @@ if (config.length) {
                 }
 
                 if (results.order.filled_quantity > 0) {
-                    console.log('Filled quantity is %s', results.order.filled_quantity);
+                    console.log('The %s %s filled quantity %s', results.order.side, results.order.currency_pair_code, results.order.filled_quantity);
                     process.exit();
                 }
 
