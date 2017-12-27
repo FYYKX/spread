@@ -3,7 +3,7 @@ var jwt = require('jsonwebtoken');
 
 var self;
 
-var qryptos = function (config) {
+var quoine = function (config) {
 	self = this;
 
 	this.token_id = config.token_id;
@@ -13,7 +13,7 @@ var qryptos = function (config) {
 			'Content-Type': 'application/json',
 			'X-Quoine-API-Version': '2'
 		},
-		baseUrl: 'https://api.qryptos.com'
+		baseUrl: config.base_url
 	});
 }
 
@@ -34,7 +34,7 @@ function getOptions(verb, url, payload) {
 	};
 }
 
-qryptos.prototype.balances = function (callback) {
+quoine.prototype.balances = function (callback) {
 	var verb = 'GET';
 	var url = '/accounts/balance';
 	var payload = {
@@ -50,7 +50,7 @@ qryptos.prototype.balances = function (callback) {
 	});
 };
 
-qryptos.prototype.trades = function (product_id, callback) {
+quoine.prototype.trades = function (product_id, callback) {
 	var verb = 'GET';
 	var url = '/executions/me?product_id=' + product_id;
 	var payload = {
@@ -66,7 +66,7 @@ qryptos.prototype.trades = function (product_id, callback) {
 	});
 };
 
-qryptos.prototype.order = function (id, callback) {
+quoine.prototype.order = function (id, callback) {
 	var verb = 'GET';
 	var url = '/orders/' + id;
 	var payload = {
@@ -82,7 +82,7 @@ qryptos.prototype.order = function (id, callback) {
 	});
 };
 
-qryptos.prototype.liveorders = function (product_id, callback) {
+quoine.prototype.liveorders = function (product_id, callback) {
 	var verb = 'GET';
 	var url = '/orders?&status=live&product_id=' + product_id;
 	var payload = {
@@ -98,7 +98,7 @@ qryptos.prototype.liveorders = function (product_id, callback) {
 	});
 };
 
-qryptos.prototype.neworder = function (product_id, amount, price, side, callback) {
+quoine.prototype.neworder = function (product_id, amount, price, side, callback) {
 	var verb = 'PUT';
 	var url = '/orders/';
 	var payload = {
@@ -121,7 +121,7 @@ qryptos.prototype.neworder = function (product_id, amount, price, side, callback
 	});
 };
 
-qryptos.prototype.cancelorder = function (id, callback) {
+quoine.prototype.cancelorder = function (id, callback) {
 	var verb = 'GET';
 	var url = '/orders/' + id + '/cancel';
 	var payload = {
@@ -137,7 +137,7 @@ qryptos.prototype.cancelorder = function (id, callback) {
 	});
 };
 
-qryptos.prototype.editorder = function (id, price, quantity, callback) {
+quoine.prototype.editorder = function (id, price, quantity, callback) {
 	var verb = 'PUT';
 	var url = '/orders/' + id;
 	var payload = {
@@ -157,4 +157,4 @@ qryptos.prototype.editorder = function (id, price, quantity, callback) {
 	});
 };
 
-module.exports = qryptos;
+module.exports = quoine;

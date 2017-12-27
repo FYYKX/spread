@@ -2,7 +2,7 @@ var request = require('request');
 var cron = require('node-cron');
 var async = require('async');
 
-var client = require('./qryptos');
+var client = require('./quoine');
 
 var config = process.argv.slice(2);
 if (config.length) {
