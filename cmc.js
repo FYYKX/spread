@@ -44,16 +44,16 @@ if (config.length) {
                     process.exit();
                 }
 
-                var price = results.order.price;
+                var price = parseFloat(results.order.price);
                 console.log('Price: ' + price);
-                var quantity = results.order.quantity;
+                var quantity = parseFloat(results.order.quantity);
                 var cmc = results.coinmarketcap.find(item => item.symbol == config.symbol);
-                var cmc_price = (cmc['price_' + config.currency.toLowerCase()] * config.discount).toFixed(4);
+                var cmc_price = (parseFloat(cmc['price_' + config.currency.toLowerCase()]) * config.discount).toFixed(4);
 
                 if (cmc_price != price) {
                     //edit order
-                    quoine.editorder(config.id, price, quantity, function (data) {
-                        console.log('Change price: ' + cmc_price);
+                    quoine.editorder(config.id, cmc_price, quantity, function (data) {
+                        console.log('Change price: ' + data.price);
                     });
                 }
             }
