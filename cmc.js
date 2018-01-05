@@ -48,7 +48,7 @@ if (config.length) {
                 console.log('Price: ' + price);
                 var quantity = parseFloat(results.order.quantity);
                 var cmc = results.coinmarketcap.find(item => item.symbol == config.symbol);
-                var cmc_price = (parseFloat(cmc['price_' + config.currency.toLowerCase()]) * config.discount).toFixed(4);
+                var cmc_price = (parseFloat(cmc['price_' + config.currency.toLowerCase()]) * config.discount).toFixed(8);
 
                 if (cmc_price != price) {
                     //edit order
