@@ -21,7 +21,7 @@ if (config.length) {
                     try {
                         callback(null, body);
                     } catch (e) {
-                        return callback(e);
+                        console.log(e);
                     }
                 });
             },
@@ -38,7 +38,7 @@ if (config.length) {
                     try {
                         callback(null, body);
                     } catch (e) {
-                        return callback(e);
+                        console.log(e);
                     }
                 });
             }
