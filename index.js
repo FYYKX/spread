@@ -1,6 +1,7 @@
 var request = require('request');
 var cron = require('node-cron');
 var async = require('async');
+var notifier = require('node-notifier');
 
 var client = require('./quoine');
 
@@ -47,12 +48,16 @@ if (config.length) {
                 console.log(err);
             } else {
                 if (results.order.status != 'live') {
-                    console.log('The order id %s %s %s status is %s', config.id, results.order.side, results.order.currency_pair_code, results.order.status);
+                    var message = util.format('The order id %s %s %s status is %s', config.id, results.order.side, results.order.currency_pair_code, results.order.status);
+                    console.log(message);
+                    notifier.notify(message);
                     process.exit();
                 }
 
                 if (results.order.filled_quantity > 0) {
-                    console.log('The %s %s filled quantity %s', results.order.side, results.order.currency_pair_code, results.order.filled_quantity);
+                    var message = util.format('The %s %s filled quantity %s', results.order.side, results.order.currency_pair_code, results.order.filled_quantity);
+                    console.log(message);
+                    notifier.notify(message);
                     process.exit();
                 }
 
@@ -109,9 +114,11 @@ if (config.length) {
                         if (profit < config.profit) {
                             console.log('buy %s < %s(config profit)', profit, config.profit);
                         }
+
                         //cancel order
                         qryptos.cancelorder(config.id, function (response) {
                             console.log('Cancel order ' + config.id);
+                            notifier.notify('Cancel order ' + config.side + ' ' + config.symbol + config.currency);
                             process.exit();
                         });
                     }
@@ -150,6 +157,7 @@ if (config.length) {
                         //cancel order
                         qryptos.cancelorder(config.id, function (response) {
                             console.log('Cancel order ' + config.id);
+                            notifier.notify('Cancel order ' + config.side + ' ' + config.symbol + config.currency);
                             process.exit();
                         });
                     }
