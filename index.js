@@ -56,6 +56,10 @@ if (config.length) {
                     process.exit();
                 }
 
+                if (config.symbol == "VET") {
+                    config.symbol = "VEN";
+                }
+
                 var coinmarketcap_price = results.coinmarketcap.find(item => item.symbol == config.symbol)['price_' + config.currency.toLowerCase()];
                 var current_price = results.order.price;
                 var quantity = results.order.quantity;
