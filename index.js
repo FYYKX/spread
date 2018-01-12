@@ -1,6 +1,7 @@
 var request = require('request');
 var cron = require('node-cron');
 var async = require('async');
+var util = require('util');
 var notifier = require('node-notifier');
 
 var client = require('./quoine');
