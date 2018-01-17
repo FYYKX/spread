@@ -28,6 +28,19 @@ module.exports = {
     discount: 0.8
 }
 ```
+order config
+``` javascript
+module.exports = {
+    base_url: 'https://api.quoine.com/',
+    token_id: 'xxx',
+    user_secret: 'xxx',
+    product_id: '51',
+    side: 'sell',
+    price: 0.00169998,
+    amount: 150,
+    unit: 20
+}
+```
 
 ## Start 
 First order to buy or sell
@@ -38,3 +51,6 @@ Follow coinmarketcap price change to buy
 
     node cmc.js config.js
 
+Make multi order to buy or sell
+
+    node order.js config.js
