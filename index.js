@@ -17,7 +17,7 @@ if (config.length) {
         async.parallel({
             coinmarketcap: function (callback) {
                 request.get({
-                    url: 'https://api.coinmarketcap.com/v1/ticker/?convert=ETH',
+                    url: 'https://api.coinmarketcap.com/v1/ticker/?convert=' + config.currency,
                     json: true
                 }, function (error, response, body) {
                     try {
@@ -34,7 +34,7 @@ if (config.length) {
             },
             book: function (callback) {
                 request.get({
-                    url: 'https://api.qryptos.com/products/' + config.product_id + '/price_levels',
+                    url: config.base_url + 'products/' + config.product_id + '/price_levels',
                     json: true
                 }, function (error, response, body) {
                     try {
