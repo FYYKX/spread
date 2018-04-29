@@ -27,6 +27,7 @@ if (config.length) {
         orders.push(price.toFormat(8));
         price = price.plus(interval);
     }
+    console.log(orders);
 
     async.everySeries(orders, function (price, callback) {
         quoine.neworder(config.product_id, config.unit, price, config.side, function (response) {
@@ -35,7 +36,7 @@ if (config.length) {
             } else {
                 console.log(config.side + " " + price + " " + config.unit + " " + response.currency_pair_code);
             }
-            callback(null);
+            callback(null, price);
         });
     }, function (err, result) {
     });
