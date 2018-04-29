@@ -27,7 +27,6 @@ if (config.length) {
         orders.push(price.toFormat(8));
         price = price.plus(interval);
     }
-    console.log(orders);
 
     async.everySeries(orders, function (price, callback) {
         quoine.neworder(config.product_id, config.unit, price, config.side, function (response) {
