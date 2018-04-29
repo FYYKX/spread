@@ -18,6 +18,9 @@ var quoine = function (config) {
 }
 
 function getOptions(verb, url, payload) {
+	payload.nonce = Date.now();
+	payload.token_id = self.token_id;
+
 	var signature = jwt.sign(payload, self.user_secret);
 	var body = '';
 
@@ -38,9 +41,7 @@ quoine.prototype.balances = function (callback) {
 	var verb = 'GET';
 	var url = '/accounts/balance';
 	var payload = {
-		'path': url,
-		'nonce': Date.now(),
-		'token_id': this.token_id
+		'path': url
 	};
 
 	var options = getOptions(verb, url, payload);
@@ -54,9 +55,7 @@ quoine.prototype.trades = function (product_id, callback) {
 	var verb = 'GET';
 	var url = '/executions/me?product_id=' + product_id;
 	var payload = {
-		'path': url,
-		'nonce': Date.now(),
-		'token_id': this.token_id
+		'path': url
 	};
 
 	var options = getOptions(verb, url, payload);
@@ -70,9 +69,7 @@ quoine.prototype.order = function (id, callback) {
 	var verb = 'GET';
 	var url = '/orders/' + id;
 	var payload = {
-		'path': url,
-		'nonce': Date.now(),
-		'token_id': this.token_id
+		'path': url
 	};
 
 	var options = getOptions(verb, url, payload);
@@ -86,9 +83,7 @@ quoine.prototype.liveorders = function (product_id, callback) {
 	var verb = 'GET';
 	var url = '/orders?&status=live&product_id=' + product_id;
 	var payload = {
-		'path': url,
-		'nonce': Date.now(),
-		'token_id': this.token_id
+		'path': url
 	};
 
 	var options = getOptions(verb, url, payload);
@@ -103,8 +98,6 @@ quoine.prototype.neworder = function (product_id, amount, price, side, callback)
 	var url = '/orders/';
 	var payload = {
 		'path': url,
-		'nonce': Date.now(),
-		'token_id': this.token_id,
 		'order': {
 			'order_type': 'limit',
 			'product_id': product_id,
@@ -125,9 +118,7 @@ quoine.prototype.cancelorder = function (id, callback) {
 	var verb = 'GET';
 	var url = '/orders/' + id + '/cancel';
 	var payload = {
-		'path': url,
-		'nonce': Date.now(),
-		'token_id': this.token_id
+		'path': url
 	};
 
 	var options = getOptions(verb, url, payload);
@@ -142,8 +133,6 @@ quoine.prototype.editorder = function (id, price, quantity, callback) {
 	var url = '/orders/' + id;
 	var payload = {
 		'path': url,
-		'nonce': Date.now(),
-		'token_id': this.token_id,
 		'order': {
 			'quantity': quantity,
 			'price': price
