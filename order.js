@@ -32,10 +32,11 @@ if (config.length) {
         quoine.neworder(config.product_id, config.unit, price, config.side, function (response) {
             if (response.errors) {
                 console.log(response.errors);
+                callback(null);
             } else {
                 console.log(config.side + " " + price + " " + config.unit + " " + response.currency_pair_code);
+                callback(null, price);
             }
-            callback(null, price);
         });
     }, function (err, result) {
     });
